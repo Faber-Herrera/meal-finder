@@ -1,0 +1,11 @@
+Layout
+  - Header
+    - Input Search
+    - Button
+  - Sidenav
+    - Categories -> Skelleton
+  - MainContent
+    - Card -> Skelleton
+Modal
+  - Content -> Skelleton
+Button
