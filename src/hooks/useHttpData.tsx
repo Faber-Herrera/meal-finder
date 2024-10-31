@@ -25,7 +25,7 @@ export default function useHttpData<T>(url: string) {
       ignore = true;
       controller.abort();
     };
-  }, []);
+  }, [url]);
 
   return { loading, data };
 }
