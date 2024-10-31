@@ -4,16 +4,17 @@ import Header from './components/Header';
 import MainContent from './components/MainContent';
 import RecipeModal from './components/RecipeModal';
 import Sidenav from './components/Sidenav';
-import useHttpData from './hooks/UseHttpData';
-import { Category, Meal, SearchForm } from './types';
+import useFetch from './hooks/useFetch';
+import useHttpData from './hooks/useHttpData';
+import { Category, Meal, MealDetails, SearchForm } from './types';
 
-const url = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
+const baseUrl = 'https://www.themealdb.com/api/json/v1/1/';
 
-const makeMealUrl = (category: Category) =>
-  `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category.strCategory}`;
+const url = `${baseUrl}list.php?c=list`;
 
-const makeMealUrlByName = (search: string) =>
-  `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
+const makeMealUrl = (category: Category) => `${baseUrl}filter.php?c=${category.strCategory}`;
+
+const makeMealUrlByName = (search: string) => `${baseUrl}search.php?s=${search}`;
 
 const defaultCategory = {
   strCategory: 'Beef',
@@ -31,6 +32,14 @@ function App() {
 
   const hanldeOnSubmit = ({ search }: SearchForm) => setSearchTerm(search);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { fetch, data: mealDetails, loading: loadingMealDetails } = useFetch<MealDetails>();
+
+  const searchMealDetails = (meal: Meal) => {
+    onOpen();
+    const getMealDetailsUrl = `${baseUrl}lookup.php?i=${meal.idMeal}`;
+    fetch(getMealDetailsUrl);
+  };
 
   return (
     <>
@@ -73,12 +82,17 @@ function App() {
           <MainContent
             meals={dataByMealName ? dataByMealName : dataMeal}
             loading={loadingByMealName || loadingMeal}
-            openRecipe={onOpen}
+            openRecipe={searchMealDetails}
           />
         </GridItem>
       </Grid>
 
-      <RecipeModal isOpen={isOpen} onClose={onClose} />
+      <RecipeModal
+        isOpen={isOpen}
+        onClose={onClose}
+        loading={loadingMealDetails}
+        mealDetails={mealDetails}
+      />
     </>
   );
 }
