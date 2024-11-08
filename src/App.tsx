@@ -25,7 +25,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const { loading, data } = useHttpData<Category>(url);
-  const { loading: loadingMeal, data: dataMeal } = useHttpData<Meal>(makeMealUrl(defaultCategory));
+  const { loading: loadingMeal, data: dataMeal } = useHttpData<Meal>(makeMealUrl(selectedCategory));
   const { loading: loadingByMealName, data: dataByMealName } = useHttpData<Meal>(
     makeMealUrlByName(searchTerm)
   );
