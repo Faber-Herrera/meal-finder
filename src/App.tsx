@@ -21,6 +21,7 @@ const defaultCategory = {
 };
 
 function App() {
+  const [toggleSidenav, setToggleSidenav] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category>(defaultCategory);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -41,13 +42,21 @@ function App() {
     fetch(getMealDetailsUrl);
   };
 
+  const handleToggleClick = () => {
+    setToggleSidenav(!toggleSidenav);
+  };
+
   return (
     <>
       <Grid
         templateAreas={`"header header"
                           "nav main"`}
         gridTemplateRows={'60px 1fr'}
-        gridTemplateColumns={{ sm: `0 1fr`, md: `250px 1fr` }}
+        gridTemplateColumns={{
+          base: `${toggleSidenav ? '150px' : 0} 1fr`,
+          sm: `${toggleSidenav ? '150px' : 0} 1fr`,
+          md: `250px 1fr`,
+        }}
         fontSize={14}
       >
         <GridItem
@@ -60,13 +69,13 @@ function App() {
           area='header'
           bg='white'
         >
-          <Header onSubmit={hanldeOnSubmit} />
+          <Header onSubmit={hanldeOnSubmit} handleToggleClick={handleToggleClick} />
         </GridItem>
         <GridItem
           pos='sticky'
           top='60px'
           left='0'
-          p='5'
+          p={[2, 2, 5]}
           area={'nav'}
           h='calc(100vh - 60px)'
           overflowY='auto'
@@ -78,11 +87,12 @@ function App() {
             setSelectedCategory={setSelectedCategory}
           />
         </GridItem>
-        <GridItem p='4' area={'main'} bg='gray.100'>
+        <GridItem p='4' area={'main'} bg='gray.100' pos='relative'>
           <MainContent
             meals={dataByMealName ? dataByMealName : dataMeal}
             loading={loadingByMealName || loadingMeal}
             openRecipe={searchMealDetails}
+            toggleSidenav={toggleSidenav}
           />
         </GridItem>
       </Grid>
