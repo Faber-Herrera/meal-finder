@@ -20,9 +20,17 @@ function Header({ onSubmit, handleToggleClick }: Props) {
   const { register, formState, handleSubmit } = useForm<SearchForm>();
   return (
     <Container maxW='3xl' mt='1'>
-      <Grid templateColumns='30px 1fr' gap={5}>
+      <Grid
+        gap={5}
+        templateColumns={{
+          base: `30px 1fr`,
+          sm: `30px 1fr`,
+          md: `1fr`,
+        }}
+      >
         <IconButton
-          aria-label='Search database'
+          display={['inherit', 'inherit', 'none']}
+          aria-label='Menu'
           icon={<HamburgerIcon />}
           onClick={() => handleToggleClick()}
         />
